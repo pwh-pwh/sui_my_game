@@ -9,12 +9,12 @@ module my_game::my_game {
     use sui::random::Random;
     use sui::transfer::{share_object, transfer, public_transfer};
     use sui::tx_context::sender;
-    use faucet_coin::faucet_coin::FaucetCoin;
+    use faucet_coin::faucet_coin::FAUCET_COIN;
 
     // 创建一个池子,并指定代币
     public struct Game has key {
         id: UID,
-        val: Balance<FaucetCoin>,
+        val: Balance<FAUCET_COIN>,
         creator: String
     }
 
@@ -43,7 +43,7 @@ module my_game::my_game {
     public entry fun play(
         game: &mut Game,
         user_value: bool,
-        user_in: Coin<FaucetCoin>,
+        user_in: Coin<FAUCET_COIN>,
         rand: &Random,
         ctx: &mut TxContext
     ) {
@@ -75,16 +75,11 @@ module my_game::my_game {
     // 将代币添加到游戏中
     public entry fun add_coin(
         game: &mut Game,
-        add_coin: Coin<FaucetCoin>,
+        add_coin: Coin<FAUCET_COIN>,
         _ctx: &mut TxContext
     ) {
         let add_coin_in_balance = into_balance(add_coin);           // 将硬币转换为余额
         balance::join(&mut game.val, add_coin_in_balance);          // 将余额加入到游戏的总余额中
-    }
-
-    // 分割代币
-    public fun split_coin<FaucetCoin>(coin: &mut Coin<FaucetCoin>, amt: u64, ctx: &mut TxContext): Coin<FaucetCoin> {
-        split(coin, amt, ctx)
     }
 
     // 从游戏池子中取出
@@ -100,4 +95,8 @@ module my_game::my_game {
     }
 
 }
-
+// packageid:0xb97f0a8843164802ce3333b4e2ba1c8410bebde6aa711aee148e65a0dd7ecc3a
+// game objid:0x8c890be0d75271976a4b0a671b969ab4999f48787a547087ec62d52147f9730b
+// withdraw:tx DuQEN1G1c7Z9SSoRL61ak8Ndaq5qBSHeB4qddYAvo11
+//play: 8EEjTDEpMPjnN9ERjYfTStJGbe43guvvhssF3SzvL5tg
+//rm:Cm7tdC9bv4fTYXNGgbNgLMCKZ3esf7Wdy3PSdLHc9irU
